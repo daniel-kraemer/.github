@@ -24,7 +24,7 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:reportverify --no-transfer-progress
+      run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report --no-transfer-progress
       
 # slow w/o api key
 #    - name: OWASP dependency check
