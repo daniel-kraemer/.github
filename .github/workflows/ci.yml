@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
@@ -24,14 +24,14 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn verify
+      run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:reportverify --no-transfer-progress
       
 # slow w/o api key
 #    - name: OWASP dependency check
-#      run: mvn org.owasp:dependency-check-maven:check
+#      run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress
 
     - name: License check
-      run: mvn license:add-third-party
+      run: mvn license:license-list --no-transfer-progress
 
     - name: SonarQube scan
-      run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true
+      run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --no-transfer-progress -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true
