@@ -23,4 +23,22 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn package -Dmaven.test.skip=true
+      
+    - name: Jacoco prepare agent
+      run: mvn jacoco:prepare-agent
+
+    - name: Run tests
+      run: mvn test
+
+    - name: Jacoco report
+      run: mvn jacoco:report
+
+    - name: OWASP dependency check
+      run: mvn org.owasp:dependency-check-maven:check
+
+    - name: License check
+      run: mvn license:add-third-party
+
+    - name: SonarQube Scan
+      run: mvn sonar:sonar -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true
