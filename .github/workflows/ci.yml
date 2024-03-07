@@ -33,9 +33,9 @@ jobs:
 
     - name: Jacoco report
       run: mvn org.jacoco:jacoco-maven-plugin:report
-
-    - name: OWASP dependency check
-      run: mvn org.owasp:dependency-check-maven:check
+# slow w/o api key
+#    - name: OWASP dependency check
+#      run: mvn org.owasp:dependency-check-maven:check
 
     - name: License check
       run: mvn license:add-third-party
