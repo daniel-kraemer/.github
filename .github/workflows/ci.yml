@@ -29,7 +29,7 @@ jobs:
       run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent
 
     - name: Run tests
-      run: mvn test
+      run: mvn surefire:test
 
     - name: Jacoco report
       run: mvn org.jacoco:jacoco-maven-plugin:report
