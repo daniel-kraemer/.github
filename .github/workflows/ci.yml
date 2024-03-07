@@ -22,12 +22,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Jacoco prepare agent
-      run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent
+
     - name: Build with Maven
       run: mvn verify
-    - name: Jacoco report
-      run: mvn org.jacoco:jacoco-maven-plugin:report
+      
 # slow w/o api key
 #    - name: OWASP dependency check
 #      run: mvn org.owasp:dependency-check-maven:check
