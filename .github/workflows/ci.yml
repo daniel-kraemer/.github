@@ -26,13 +26,13 @@ jobs:
       run: mvn package -Dmaven.test.skip=true
       
     - name: Jacoco prepare agent
-      run: mvn jacoco:prepare-agent
+      run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent
 
     - name: Run tests
       run: mvn test
 
     - name: Jacoco report
-      run: mvn jacoco:report
+      run: mvn org.jacoco:jacoco-maven-plugin:report
 
     - name: OWASP dependency check
       run: mvn org.owasp:dependency-check-maven:check
@@ -40,5 +40,5 @@ jobs:
     - name: License check
       run: mvn license:add-third-party
 
-    - name: SonarQube Scan
-      run: mvn sonar:sonar -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true
+    - name: SonarQube scan
+      run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true
