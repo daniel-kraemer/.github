@@ -20,7 +20,7 @@ jobs:
     - name: Cache results
       uses: actions/cache/save@v3
       with:
-        path: /target
+        path: ./target
         key: cache-${{ hashFiles('**/pom.xml') }}
   owasp-dependency-check:
     runs-on: ubuntu-latest
@@ -31,6 +31,7 @@ jobs:
       - name: Restore cache
         uses: actions/cache/restore@v3
         with:
+          path: ./
           key: cache-${{ hashFiles('**/pom.xml') }}
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -43,6 +44,7 @@ jobs:
         with:
           repository: daniel-kraemer/.github
           ref: main
+          path: ./
           sparse-checkout: |
             owasp-suppressions.xml
       - name: OWASP Dependency Check
@@ -50,7 +52,7 @@ jobs:
       - name: Cache results
         uses: actions/cache/save@v3
         with:
-          path: /target
+          path: ./target
           key: cache-${{ hashFiles('**/pom.xml') }}
   sonarqube-analysis:
     runs-on: ubuntu-latest
@@ -61,6 +63,7 @@ jobs:
       - name: Restore cache
         uses: actions/cache/restore@v3
         with:
+          path: ./
           key: cache-${{ hashFiles('**/pom.xml') }}
       - name: Set up JDK 17
         uses: actions/setup-java@v3
