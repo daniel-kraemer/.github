@@ -35,6 +35,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: OWASP Dependency Check
+        with:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress -DnvdApiKey=${{ secrets.NVD_API_KEY }}
 
   sonarqube-analysis:
@@ -52,4 +54,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: SonarQube Analysis
+        with:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --no-transfer-progress -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true
