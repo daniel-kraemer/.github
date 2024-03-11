@@ -40,13 +40,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Download OWASP suppressions
-        uses: actions/checkout@v4
-        with:
-          repository: daniel-kraemer/.github
-          ref: main
-          sparse-checkout: |
-            owasp-suppressions.xml
-          persist-credentials: false
+        run: curl -sSL -o owasp-suppressions.xml 'https://raw.githubusercontent.com/daniel-kraemer/.github/owasp-suppressions.xml'
       - name: OWASP Dependency Check
         run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress -DnvdApiKey=${{ secrets.NVD_API_KEY }} -DsuppressionFile=owasp-suppressions.xml
       - name: Cache results
