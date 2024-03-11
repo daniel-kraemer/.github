@@ -22,6 +22,7 @@ jobs:
 
   owasp-dependency-check:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Reuse workspace
         uses: actions/checkout@v4
@@ -34,10 +35,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: OWASP Dependency Check
-        run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress
+        run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress -DnvdApiKey=${{ secrets.NVD_API_KEY }}
 
   sonarqube-analysis:
     runs-on: ubuntu-latest
+    needs: owasp-dependency-check
     steps:
       - name: Reuse workspace
         uses: actions/checkout@v4
