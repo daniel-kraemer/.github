@@ -44,7 +44,7 @@ jobs:
         with:
           repository: daniel-kraemer/.github
           ref: main
-          path: ./
+          path: ./target
           sparse-checkout: |
             owasp-suppressions.xml
       - name: OWASP Dependency Check
