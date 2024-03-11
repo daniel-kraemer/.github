@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <suppress until="2024-12-31Z">
+        <notes><![CDATA[
+        This suppresses a CVE identified by OSS Index using the vulnerability name and packageUrl.
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-server@.*$</packageUrl>
+        <vulnerabilityName>CVE-2017-7656</vulnerabilityName>
+    </suppress>
+</suppressions>

@@ -34,8 +34,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+      - name: Download OWASP suppressions
+        uses: actions/checkout@v4
+        with:
+          repository: daniel-kraemer/.github
+          ref: main # or whichever branch or tag the file is in
+          path: owasp-suppressions.xml # specify the path to copy the file to in your repository
       - name: OWASP Dependency Check
-        run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress -DnvdApiKey=${{ secrets.NVD_API_KEY }}
+        run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress -DnvdApiKey=${{ secrets.NVD_API_KEY }} -DsuppressionFile=owasp-suppressions.xml
 
   sonarqube-analysis:
     runs-on: ubuntu-latest
