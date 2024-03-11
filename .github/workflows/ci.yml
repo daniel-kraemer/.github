@@ -43,7 +43,8 @@ jobs:
         with:
           repository: daniel-kraemer/.github
           ref: main
-          path: owasp-suppressions.xml
+          sparse-checkout: |
+            owasp-suppressions.xml
       - name: OWASP Dependency Check
         run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress -DnvdApiKey=${{ secrets.NVD_API_KEY }} -DsuppressionFile=owasp-suppressions.xml
       - name: Cache results
