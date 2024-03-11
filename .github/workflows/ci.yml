@@ -48,6 +48,8 @@ jobs:
         with:
           path: ./target
           key: cache-${{ hashFiles('**/pom.xml') }}
+          restore-keys:
+            cache-
   sonarqube-analysis:
     runs-on: ubuntu-latest
     needs: owasp-dependency-check
