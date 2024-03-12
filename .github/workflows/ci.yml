@@ -18,7 +18,7 @@ jobs:
     - name: Build
       run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report --no-transfer-progress
     - name: Cache results
-      uses: actions/cache/save@v3
+      uses: actions/cache@v3
       with:
         path: ./target
         key: build-artifacts-cache
@@ -29,7 +29,7 @@ jobs:
       - name: Checkout workspace
         uses: actions/checkout@v4
       - name: Restore cache
-        uses: actions/cache/restore@v3
+        uses: actions/cache@v3
         with:
           path: ./
           key: build-artifacts-cache
@@ -45,7 +45,7 @@ jobs:
 #      - name: OWASP Dependency Check
 #        run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress -DnvdApiKey=${{ secrets.NVD_API_KEY }} -DsuppressionFile=owasp-suppressions.xml
       - name: Cache results
-        uses: actions/cache/save@v3
+        uses: actions/cache@v3
         with:
           path: ./target
           key: build-artifacts-cache
@@ -56,7 +56,7 @@ jobs:
       - name: Checkout workspace
         uses: actions/checkout@v4
       - name: Restore cache
-        uses: actions/cache/restore@v3
+        uses: actions/cache@v3
         with:
           path: ./
           key: build-artifacts-cache
