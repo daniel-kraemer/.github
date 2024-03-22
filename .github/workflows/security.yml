@@ -72,28 +72,27 @@ jobs:
     steps:
       - name: Create Jira Issue
         env:
+          JQL_QUERY: 'project = "SEC" AND summary = "${{ issue_summary }}" AND resolution != "DONE"'
+          ISSUE_SUMMARY: "${{ github.repository }} @ ${{ github.ref_name }} - Security Check failed"
           OWASP_REPORT_URL: ${{ needs.owasp-dependency-check.outputs.dependency-check-report-url }}
         run: |
-          issue_summary="${{ github.repository }} @ ${{ github.ref_name }} - Security Check failed"
-          jql_query='project = "SEC" AND summary = "${{ env.issue_summary }}" AND resolution != "DONE"'
-          echo "${jql_query}"
+          echo "${JQL_QUERY}"
           data='{
             "fields": {
               "project": {
                 "key": "SEC"
               },
-              "summary": "${{ env.issue_summary }}",
-              "description": "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\nOWASP Dependency Check Report: $OWASP_REPORT_URL",
+              "summary": "${{ env.ISSUE_SUMMARY }}",
+              "description": "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \nOWASP Dependency Check Report: ${{ env.OWASP_REPORT_URL }}",
               "issuetype": {
                 "name": "Bug"
               }
             }
           }'
           echo "${data}"
-#         response=$(curl -X GET -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" "${{ secrets.JIRA_API_ENDPOINT }}/rest/api/3/search?jql=${JQL_QUERY}")
+          
           # Check if the issue exists
+#         response=$(curl -X GET -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" "${{ secrets.JIRA_API_ENDPOINT }}/rest/api/3/search?jql=${jql_query}")
 #         if [ "$(echo "$response" | jq '.total')" -gt 0 ]; then
-#         data='{"fields": {"project": {"key": "SEC"},"summary": "'"${issue_summary}"'","description": "Run: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\nBuild Artifacts: ${{ steps.artifact.outputs.url }}","issuetype": {"name": "Bug"}}}'
-
-#         curl -X POST -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" --data "${DATA}" "${{ secrets.JIRA_HOST }}/rest/api/3/issue"
+#           curl -X POST -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" --data "${DATA}" "${{ secrets.JIRA_HOST }}/rest/api/3/issue"
 #         fi
