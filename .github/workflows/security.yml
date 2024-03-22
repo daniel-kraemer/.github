@@ -1,4 +1,4 @@
-name: Security Build
+name: Security Check
 
 on:
   workflow_call:
@@ -69,25 +69,25 @@ jobs:
     steps:
       - name: Create Jira Issue
         run: |
-          issue_summary="$GITHUB_REPOSITORY @ $GITHUB_REF - Security Build failed"
+          issue_summary="$GITHUB_REPOSITORY @ $GITHUB_REF - Security Check failed"
           jql_query='project = "SEC" AND summary = "${issue_summary}" AND resolution != "DONE"'
           echo "${jql_query}"
 #          RESPONSE=$(curl -X GET -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" "${{ secrets.JIRA_API_ENDPOINT }}/rest/api/3/search?jql=${JQL_QUERY}")
 
           # Check if the issue exists
 #          if [ "$(echo "$RESPONSE" | jq '.total')" -gt 0 ]; then
-#          DATA='{
- #           "fields": {
-  #            "project": {
-   #             "key": "SEC"
-    #          },
-     #         "summary": "${{ ISSUE_SUMMARY }}",
-      #        "description": "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\nBuild Artifacts: ${{ steps.artifact.outputs.url }}",
-       #       "issuetype": {
-        #        "name": "Bug"
-         #     }
-          #  }
-          #}'
-          #echo "${DATA}"
+          data='{
+            "fields": {
+              "project": {
+                "key": "SEC"
+              },
+              "summary": "${{ ISSUE_SUMMARY }}",
+              "description": "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\nBuild Artifacts: ${{ steps.artifact.outputs.url }}",
+              "issuetype": {
+                "name": "Bug"
+              }
+            }
+          }'
+          echo "${data}"
 #          curl -X POST -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" --data "${DATA}" "${{ secrets.JIRA_HOST }}/rest/api/3/issue"
 #          fi
