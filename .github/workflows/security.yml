@@ -36,6 +36,7 @@ jobs:
         run: >
           mvn --no-transfer-progress
           org.owasp:dependency-check-maven:check
+          -DfailBuildOnCVSS=0
           -DhostedSuppressionsUrl=https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
       - name: Upload Dependency Check Report
@@ -61,3 +62,39 @@ jobs:
         with:
           name: license-check-report
           path: ./target/site/*
+  create-jira-issue:
+    runs-on: ubuntu-latest
+    if: failure()
+    env:
+      ISSUE_SUMMARY = ${{ github.repository }} @ ${{ github.ref }} - Security Build failed
+    steps:
+      - name: Query Jira Issue
+        id: query_issue
+        run: |
+          JQL_QUERY='project = "SEC" AND summary = "${{ ISSUE_SUMMARY }}" AND resolution != "DONE"'
+          echo "${JQL_QUERY}"
+#          RESPONSE=$(curl -X GET -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" "${{ secrets.JIRA_API_ENDPOINT }}/rest/api/3/search?jql=${JQL_QUERY}")
+
+          # Check if the issue exists
+#          if [ "$(echo "$RESPONSE" | jq '.total')" -gt 0 ]; then
+#            echo "::set-output name=jira_issue_already_exists::true"
+#          else
+            echo "::set-output name=jira_issue_already_exists::false"
+#          fi
+      - name: Create Jira Issue
+        if: steps.query_issue.outputs.jira_issue_already_exists == 'false'
+        run: |
+          DATA='{
+            "fields": {
+              "project": {
+                "key": "SEC"
+              },
+              "summary": "${{ ISSUE_SUMMARY }}",
+              "description": "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\nBuild Artifacts: ${{ steps.artifact.outputs.url }}",
+              "issuetype": {
+                "name": "Bug"
+              }
+            }
+          }'
+          echo "${DATA}"
+#          curl -X POST -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" --data "${DATA}" "${{ secrets.JIRA_HOST }}/rest/api/3/issue"
