@@ -34,14 +34,12 @@ jobs:
         with:
           path: ./target
           key: build-artifacts-cache
-      - name: Download OWASP suppressions
-        run: curl -sSL -o owasp-suppressions.xml 'https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml'
       - name: OWASP Dependency Check
         run: >
           mvn --no-transfer-progress
           org.owasp:dependency-check-maven:check 
           -DnvdApiKey=${{ secrets.NVD_API_KEY }}
-          -DsuppressionFile=owasp-suppressions.xml
+          -DhostedSuppressionsUrl=https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
       - name: Upload Dependency Check Report
         uses: actions/upload-artifact@v4
