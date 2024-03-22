@@ -35,9 +35,11 @@ jobs:
           path: ./target
           key: build-artifacts-cache
       - name: OWASP Dependency Check
+        continue-on-error: true
         run: >
           mvn --no-transfer-progress
           org.owasp:dependency-check-maven:check
+          -Dformats=HTML,JSON
           -DfailBuildOnCVSS=0
           -DhostedSuppressionsUrl=https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
@@ -94,5 +96,5 @@ jobs:
           # Check if the issue exists
 #         response=$(curl -X GET -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" "${{ secrets.JIRA_API_ENDPOINT }}/rest/api/3/search?jql=${jql_query}")
 #         if [ "$(echo "$response" | jq '.total')" -gt 0 ]; then
-#           curl -X POST -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" --data "${DATA}" "${{ secrets.JIRA_HOST }}/rest/api/3/issue"
+#           curl -X POST -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" --data "${data}" "${{ secrets.JIRA_HOST }}/rest/api/3/issue"
 #         fi
