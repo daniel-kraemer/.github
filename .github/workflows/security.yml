@@ -74,16 +74,16 @@ jobs:
         env:
           OWASP_REPORT_URL: ${{ needs.owasp-dependency-check.outputs.dependency-check-report-url }}
         run: |
-          issue_summary="${{ github.repository }} @ ${{ github.ref }} - Security Check failed"
-          jql_query='project = "SEC" AND summary = "${issue_summary}" AND resolution != "DONE"'
+          issue_summary="${{ github.repository }} @ ${{ github.ref_name }} - Security Check failed"
+          jql_query='project = "SEC" AND summary = "${{ env.issue_summary }}" AND resolution != "DONE"'
           echo "${jql_query}"
           data='{
             "fields": {
               "project": {
                 "key": "SEC"
               },
-              "summary": "${issue_summary}",
-              "description": "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \nOWASP Dependency Check Report: $OWASP_REPORT_URL",
+              "summary": "${{ env.issue_summary }}",
+              "description": "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\nOWASP Dependency Check Report: $OWASP_REPORT_URL",
               "issuetype": {
                 "name": "Bug"
               }
