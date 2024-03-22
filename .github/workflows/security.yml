@@ -18,4 +18,12 @@ jobs:
       - name: Download OWASP suppressions
         run: curl -sSL -o owasp-suppressions.xml 'https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml'
       - name: OWASP Dependency Check
-        run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress -DnvdApiKey=${{ secrets.NVD_API_KEY }} -DsuppressionFile=owasp-suppressions.xml -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
+        run: mvn org.owasp:dependency-check-maven:check --no-transfer-progress \
+          -DnvdApiKey=${{ secrets.NVD_API_KEY }} \
+          -DsuppressionFile=owasp-suppressions.xml \
+          -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
+      - name: Upload Report
+        uses: actions/upload-artifact@master
+        with:
+          name: Depcheck report
+          path: ./target/dependency-check-report.html
