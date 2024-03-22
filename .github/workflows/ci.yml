@@ -16,7 +16,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build
-      run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report --no-transfer-progress
+      run: >
+        mvn --no-transfer-progress 
+        org.jacoco:jacoco-maven-plugin:prepare-agent 
+        verify 
+        org.jacoco:jacoco-maven-plugin:report
     - uses: actions/cache@v3
       with:
         path: ./target
@@ -39,4 +43,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: SonarQube Analysis
-        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --no-transfer-progress -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.qualitygate.wait=true
+        run: >
+          mvn --no-transfer-progress
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --no-transfer-progress 
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} 
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} 
+          -Dsonar.qualitygate.wait=true

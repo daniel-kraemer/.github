@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  owasp-dependency-check:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout workspace
@@ -16,17 +16,56 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build
-        run: mvn verify --no-transfer-progress -DskipTests
+        run: > 
+          mvn --no-transfer-progress 
+          verify 
+          -DskipTests
+      - uses: actions/cache@v3
+        with:
+          path: ./target
+          key: build-artifacts-cache
+  owasp-dependency-check:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout workspace
+        uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: ./
+          key: build-artifacts-cache
+          restore-keys: build-artifacts-cache
       - name: Download OWASP suppressions
         run: curl -sSL -o owasp-suppressions.xml 'https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml'
       - name: OWASP Dependency Check
         run: >
-          mvn org.owasp:dependency-check-maven:check --no-transfer-progress
+          mvn --no-transfer-progress
+          org.owasp:dependency-check-maven:check 
           -DnvdApiKey=${{ secrets.NVD_API_KEY }}
           -DsuppressionFile=owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
-      - name: Upload Report
-        uses: actions/upload-artifact@master
+      - name: Upload Dependency Check Report
+        uses: actions/upload-artifact@v4
         with:
-          name: Depcheck report
+          name: OWASP Dependency Check Report
           path: ./target/dependency-check-report.html
+  license-check:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout workspace
+        uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: ./
+          key: build-artifacts-cache
+          restore-keys: build-artifacts-cache
+      - name: Licence Check
+        run: >
+          mvn --no-transfer-progress
+          org.codehaus.mojo:license-maven-plugin:third-party-report
+      - name: Upload License Check Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: License Check Report
+          path: ./target/site/*
