@@ -69,8 +69,8 @@ jobs:
     steps:
       - name: Create Jira Issue
         run: |
-          issue_summary = ${{ github.repository }} @ ${{ github.ref }} - Security Build failed
-          jql_query='project = "SEC" AND summary = "${{ ISSUE_SUMMARY }}" AND resolution != "DONE"'
+          issue_summary = $GITHUB_REPOSITORY @ $GITHUB_REF - Security Build failed
+          jql_query='project = "SEC" AND summary = "${issue_summary}" AND resolution != "DONE"'
           echo "${jql_query}"
 #          RESPONSE=$(curl -X GET -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" "${{ secrets.JIRA_API_ENDPOINT }}/rest/api/3/search?jql=${JQL_QUERY}")
 
