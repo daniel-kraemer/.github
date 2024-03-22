@@ -65,12 +65,10 @@ jobs:
   create-jira-issue:
     runs-on: ubuntu-latest
     if: failure()
-    env:
-      ISSUE_SUMMARY = ${{ github.repository }} @ ${{ github.ref }} - Security Build failed
     steps:
-      - name: Query Jira Issue
-        id: query_issue
+      - name: Create Jira Issue
         run: |
+          ISSUE_SUMMARY = ${{ github.repository }} @ ${{ github.ref }} - Security Build failed
           JQL_QUERY='project = "SEC" AND summary = "${{ ISSUE_SUMMARY }}" AND resolution != "DONE"'
           echo "${JQL_QUERY}"
 #          RESPONSE=$(curl -X GET -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" "${{ secrets.JIRA_API_ENDPOINT }}/rest/api/3/search?jql=${JQL_QUERY}")
@@ -81,9 +79,6 @@ jobs:
 #          else
             echo "::set-output name=jira_issue_already_exists::false"
 #          fi
-      - name: Create Jira Issue
-        if: steps.query_issue.outputs.jira_issue_already_exists == 'false'
-        run: |
           DATA='{
             "fields": {
               "project": {
