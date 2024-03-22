@@ -26,8 +26,6 @@ jobs:
   owasp-dependency-check:
     runs-on: ubuntu-latest
     needs: build
-    outputs:
-      dependency-check-report-url: ${{ steps.upload-dependency-check-report.outputs.artifact-url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
@@ -44,7 +42,7 @@ jobs:
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
       - name: Upload Dependency Check Report
         uses: actions/upload-artifact@v4
-        if: always()
+        if: success() || failure()
         with:
           name: owasp-dependency-check-report
           path: ./target/dependency-check-report.html
@@ -63,7 +61,7 @@ jobs:
           org.codehaus.mojo:license-maven-plugin:third-party-report
       - name: Upload License Check Report
         uses: actions/upload-artifact@v4
-        if: always()
+        if: success() || failure()
         with:
           name: license-check-report
           path: ./target/site/*
