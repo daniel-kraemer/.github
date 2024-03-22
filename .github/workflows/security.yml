@@ -16,9 +16,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build
-        run: > 
-          mvn --no-transfer-progress 
-          verify 
+        run: >
+          mvn --no-transfer-progress
+          verify
           -DskipTests
       - uses: actions/cache@v4
         with:
@@ -37,7 +37,7 @@ jobs:
       - name: OWASP Dependency Check
         run: >
           mvn --no-transfer-progress
-          org.owasp:dependency-check-maven:check 
+          org.owasp:dependency-check-maven:check
           -DnvdApiKey=${{ secrets.NVD_API_KEY }}
           -DhostedSuppressionsUrl=https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
