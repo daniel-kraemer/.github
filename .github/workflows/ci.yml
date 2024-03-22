@@ -10,7 +10,7 @@ jobs:
     - name: Checkout workspace
       uses: actions/checkout@v4
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -21,7 +21,7 @@ jobs:
         org.jacoco:jacoco-maven-plugin:prepare-agent 
         verify 
         org.jacoco:jacoco-maven-plugin:report
-    - uses: actions/cache@v3
+    - uses: actions/cache/save@v3
       with:
         path: ./target
         key: build-artifacts-cache
@@ -31,17 +31,10 @@ jobs:
     steps:
       - name: Checkout workspace
         uses: actions/checkout@v4
-      - uses: actions/cache@v3
+      - uses: actions/cache/restore@v3
         with:
           path: ./
           key: build-artifacts-cache
-          restore-keys: build-artifacts-cache
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
       - name: SonarQube Analysis
         run: >
           mvn --no-transfer-progress
