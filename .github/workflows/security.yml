@@ -72,9 +72,9 @@ jobs:
     steps:
       - name: Create Jira Issue
         env:
-          OWASP_REPORT_URL: ${{needs.owasp-dependency-check.outputs.dependency-check-report-url}}
+          OWASP_REPORT_URL: ${{ needs.owasp-dependency-check.outputs.dependency-check-report-url }}
         run: |
-          issue_summary="${{ GITHUB_REPOSITORY }} @ ${{ GITHUB_REF }} - Security Check failed"
+          issue_summary="${{ github.repository }} @ ${{ github.ref }} - Security Check failed"
           jql_query='project = "SEC" AND summary = "${{ issue_summary }}" AND resolution != "DONE"'
           echo "${jql_query}"
           data='{
@@ -83,7 +83,7 @@ jobs:
                 "key": "SEC"
               },
               "summary": "${{ issue_summary }}",
-              "description": "Run: https://github.com/${{ GITHUB_REPOSITORY }}/actions/runs/${{ $GITHUB_RUN_ID}} \nOWASP Dependency Check Report: ${{ OWASP_REPORT_URL }}",
+              "description": "Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \nOWASP Dependency Check Report: ${{ OWASP_REPORT_URL }}",
               "issuetype": {
                 "name": "Bug"
               }
