@@ -75,10 +75,6 @@ jobs:
 
           # Check if the issue exists
 #          if [ "$(echo "$RESPONSE" | jq '.total')" -gt 0 ]; then
-#            echo "::set-output name=jira_issue_already_exists::true"
-#          else
-            echo "::set-output name=jira_issue_already_exists::false"
-#          fi
           DATA='{
             "fields": {
               "project": {
@@ -93,3 +89,4 @@ jobs:
           }'
           echo "${DATA}"
 #          curl -X POST -H "Content-Type: application/json" -u "${{ secrets.JIRA_USERNAME }}:${{ secrets.JIRA_API_TOKEN }}" --data "${DATA}" "${{ secrets.JIRA_HOST }}/rest/api/3/issue"
+#          fi
