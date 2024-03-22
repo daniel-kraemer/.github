@@ -20,7 +20,7 @@ jobs:
           mvn --no-transfer-progress 
           verify 
           -DskipTests
-      - uses: actions/cache/save@v3
+      - uses: actions/cache@v4
         with:
           path: ./target
           key: build-artifacts-cache
@@ -30,9 +30,9 @@ jobs:
     steps:
       - name: Checkout workspace
         uses: actions/checkout@v4
-      - uses: actions/cache/restore@v3
+      - uses: actions/cache@v4
         with:
-          path: ./
+          path: ./target
           key: build-artifacts-cache
       - name: Download OWASP suppressions
         run: curl -sSL -o owasp-suppressions.xml 'https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml'
@@ -54,9 +54,9 @@ jobs:
     steps:
       - name: Checkout workspace
         uses: actions/checkout@v4
-      - uses: actions/cache/restore@v3
+      - uses: actions/cache@v4
         with:
-          path: ./
+          path: ./target
           key: build-artifacts-cache
       - name: Licence Check
         run: >
