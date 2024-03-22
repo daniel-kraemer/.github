@@ -26,6 +26,8 @@ jobs:
   owasp-dependency-check:
     runs-on: ubuntu-latest
     needs: build
+    outputs:
+      dependency-check-report-url: ${{ steps.upload-dependency-check-report.outputs.artifact-url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
@@ -40,6 +42,7 @@ jobs:
           -DhostedSuppressionsUrl=https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
       - name: Upload Dependency Check Report
+        id: upload-dependency-check-report
         uses: actions/upload-artifact@v4
         with:
           name: owasp-dependency-check-report
@@ -68,17 +71,19 @@ jobs:
     if: failure()
     steps:
       - name: Create Jira Issue
+        env:
+          OWASP_REPORT_URL: ${{needs.owasp-dependency-check.outputs.dependency-check-report-url}}
         run: |
-          issue_summary="$GITHUB_REPOSITORY @ $GITHUB_REF - Security Check failed"
-          jql_query='project = "SEC" AND summary = "$issue_summary" AND resolution != "DONE"'
+          issue_summary="${{ GITHUB_REPOSITORY }} @ ${{ GITHUB_REF }} - Security Check failed"
+          jql_query='project = "SEC" AND summary = "${{ issue_summary }}" AND resolution != "DONE"'
           echo "${jql_query}"
           data='{
             "fields": {
               "project": {
                 "key": "SEC"
               },
-              "summary": "$issue_summary",
-              "description": "Run: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\nBuild Artifacts: ${{ steps.artifact.outputs.url }}",
+              "summary": "${{ issue_summary }}",
+              "description": "Run: https://github.com/${{ GITHUB_REPOSITORY }}/actions/runs/${{ $GITHUB_RUN_ID}} \nOWASP Dependency Check Report: ${{ OWASP_REPORT_URL }}",
               "issuetype": {
                 "name": "Bug"
               }
