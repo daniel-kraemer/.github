@@ -42,6 +42,9 @@ jobs:
           -DfailBuildOnCVSS=0
           -DhostedSuppressionsUrl=https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
+      - name: Create Jira Issues for CVE
+        if: success() || failure()
+        run: ./create_jira_issue ./target/dependency-check-report.json ${{ secrets.JIRA_API_URL }} ${{ secrets.JIRA_API_USER }} ${{ secrets.JIRA_API_TOKEN }}
       - name: Upload Dependency Check Report
         uses: actions/upload-artifact@v4
         if: success() || failure()
