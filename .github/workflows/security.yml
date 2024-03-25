@@ -85,6 +85,10 @@ jobs:
         run: >
           mvn --no-transfer-progress
           org.codehaus.mojo:license-maven-plugin:third-party-report
+          -Dlicense.failOnBlacklist=true
+          -Dlicense.failOnMissing=true
+          -Dlicense.includedLicenses=https://raw.githubusercontent.com/daniel-kraemer/.github/main/included-licenses.txt
+          -Dlicense.excludedLicenses=https://raw.githubusercontent.com/daniel-kraemer/.github/main/excluded-licenses.txt
       - name: Upload License Check Report
         uses: actions/upload-artifact@v4
         if: success() || failure()

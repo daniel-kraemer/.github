@@ -56,7 +56,7 @@ jobs:
       - name: SonarQube Analysis
         run: >
           mvn --no-transfer-progress
-          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --no-transfer-progress
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.qualitygate.wait=true
