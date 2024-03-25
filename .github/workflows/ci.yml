@@ -43,5 +43,6 @@ jobs:
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
           -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+          -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
           -Dsonar.links.scm=${{ github.server_url }}/${{ github.repository }}
           -Dsonar.qualitygate.wait=true
