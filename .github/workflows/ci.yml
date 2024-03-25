@@ -37,7 +37,7 @@ jobs:
       - uses: actions/cache/save@v4
         with:
           path: ./target
-          key: ${{ runner.os }}-ci-build-artifacts-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-ci-build-artifacts-${{ github.run_id }}-${{ hashFiles('**/pom.xml') }}
   sonarqube-analysis:
     runs-on: ubuntu-latest
     needs: build
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: ./target
-          key: ${{ runner.os }}-ci-build-artifacts-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-ci-build-artifacts-${{ github.run_id }}-${{ hashFiles('**/pom.xml') }}
       - name: SonarQube Analysis
         run: >
           mvn --no-transfer-progress

@@ -36,7 +36,7 @@ jobs:
       - uses: actions/cache/save@v4
         with:
           path: ./target
-          key: ${{ runner.os }}-security-check-artifacts-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-security-check-artifacts-${{ github.run_id }}-${{ hashFiles('**/pom.xml') }}
   owasp-dependency-check:
     runs-on: ubuntu-latest
     needs: build
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: ./target
-          key: ${{ runner.os }}-security-check-artifacts-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-security-check-artifacts-${{ github.run_id }}-${{ hashFiles('**/pom.xml') }}
       - name: OWASP Dependency Check
         run: >
           mvn --no-transfer-progress
@@ -80,7 +80,7 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: ./target
-          key: ${{ runner.os }}-security-check-artifacts-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-security-check-artifacts-${{ github.run_id }}-${{ hashFiles('**/pom.xml') }}
       - name: Licence Check
         run: >
           mvn --no-transfer-progress
