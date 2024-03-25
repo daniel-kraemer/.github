@@ -8,9 +8,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          fetch-depth: 0
-      - uses: ./.github/workflows/ci.yml
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Set up settings.xml
+        uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: |
+            [{
+              "id": "camunda-bpm-nexus-ee",
+              "username": "${{ secrets.CAMUNDA_REPO_USERNAME }}",
+              "password": "${{ secrets.CAMUNDA_REPO_PASSWORD }}"
+            },
+            {
+              "id": "ZK EE",
+              "username": "${{ secrets.ZKOSS_REPO_USERNAME }}",
+              "password": "${{ secrets.ZKOSS_REPO_PASSWORD }}"
+            }]
+      - name: Build
+        run: >
+          mvn --no-transfer-progress
+          verify
+          -DskipTests
       - name: OWASP Dependency Check
         if: success() || failure()
         run: >
