@@ -62,5 +62,5 @@ jobs:
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
           -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-          -Dsonar.links.scm=${{ env.GITHUB_SERVER_URL }}/${{ env.GITHUB_REPOSITORY }}
+          -Dsonar.links.scm=$env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY
           -Dsonar.qualitygate.wait=true
