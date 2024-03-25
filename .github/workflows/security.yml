@@ -14,6 +14,20 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+      - name: Set up settings.xml
+        uses: s4u/maven-settings-action@v3
+        with:
+          servers: |
+            [{
+              "id": "camunda-bpm-nexus-ee",
+              "username": "${{ secrets.CAMUNDA_REPO_USERNAME }}",
+              "password": "${{ secrets.CAMUNDA_REPO_PASSWORD }}"
+            },
+            {
+              "id": "ZK EE",
+              "username": "${{ secrets.ZKOSS_REPO_USERNAME }}",
+              "password": "${{ secrets.ZKOSS_REPO_PASSWORD }}"
+            }]
       - name: Build
         run: >
           mvn --no-transfer-progress
