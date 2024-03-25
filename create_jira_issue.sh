@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Check if argument are okay
-if [[ $# -ne 4 ]]; then
-    echo "Usage: $0 <report_file> <jira_api_url> <jira_api_user> <jira_api_token>"
+if [[ $# -ne 5 ]]; then
+    echo "Usage: $0 <report_file> <jira_api_url> <jira_api_user> <jira_api_token> <github_run_url>"
     exit 1
 fi
 
@@ -11,6 +11,7 @@ REPORT_FILE="$1"
 JIRA_API_URL="$2"
 JIRA_API_USER="$3"
 JIRA_API_TOKEN="$4"
+GITHUB_RUN_URL="$5"
 
 # Jira REST API endpoint to create an issue
 JIRA_CREATE_ISSUE_API="$JIRA_API_URL/rest/api/latest/issue"
@@ -60,14 +61,12 @@ for vulnerability in $(echo "${vulnerabilities}" | jq -r '.[] | @base64'); do
     issue_description=${vulnerability_description//$'\n'/\\n}
     issue_description=${issue_description//$'\"'/}
     issue_description="*National Vulnerability Database:* https://nvd.nist.gov/vuln/detail/$vulnerability_name\\n\\n{quote}$issue_description{quote}"
-
-    echo "$issue_description"
+    issue_description="$issue_description\\n\\n*First encountered in: $GITHUB_RUN_URL"
 
     # Escape issue summary
     issue_summary=${vulnerability_description//$'\n'/ }
     issue_summary=${issue_summary//$'\"'/}
-    issue_summary=$(echo "$vulnerability_name - $issue_summary" | sed "s/\(.\{252\}\).*/\1.../")
-    echo "$issue_summary"
+    issue_summary=$(echo "$vulnerability_name - $issue_summary" | sed "s/\(.\{250\}\).*/\1 .../")
 
     # JSON payload for creating a new issue
     payload=$(cat <<EOF
