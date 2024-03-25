@@ -34,7 +34,7 @@ jobs:
           org.jacoco:jacoco-maven-plugin:prepare-agent
           verify
           org.jacoco:jacoco-maven-plugin:report
-      - uses: actions/cache@v4
+      - uses: actions/cache/save@v4
         with:
           path: ./target
           key: build-artifacts-cache
@@ -51,7 +51,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         with:
           path: ./target
           key: build-artifacts-cache
