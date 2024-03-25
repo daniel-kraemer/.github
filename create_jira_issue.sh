@@ -61,7 +61,7 @@ for vulnerability in $(echo "${vulnerabilities}" | jq -r '.[] | @base64'); do
     issue_description=${vulnerability_description//$'\n'/\\n}
     issue_description=${issue_description//$'\"'/}
     issue_description="*National Vulnerability Database:* https://nvd.nist.gov/vuln/detail/$vulnerability_name\\n\\n{quote}$issue_description{quote}"
-    issue_description="$issue_description\\n\\n*First encountered in: $GITHUB_RUN_URL"
+    issue_description="$issue_description\\n\\n*First encountered in*: $GITHUB_RUN_URL"
 
     # Escape issue summary
     issue_summary=${vulnerability_description//$'\n'/ }
