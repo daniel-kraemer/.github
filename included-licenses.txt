@@ -1,14 +1,35 @@
+Apache 2
+Apache License 2.0
+Apache License, 2.0
+Apache License, version 2.0
+Apache License, Version 2.0
 Apache-1.0
 Apache-1.1
 Apache-2.0
 BSD
+BSD License 3
 BSD-2-Clause
 BSD-3-Clause
 BSD-4-Clause
 BSD-4-Clause-UC
 CC0
 CC0-1.0
+Eclipse Distribution License - v 1.0
+Eclipse Public License - v 1.0
+Eclipse Public License v2.0
+EDL 1.0
+EPL 2.0
+GNU Lesser General Public License
+GPL2 w/ CPE
 ISC
+LGPL 2.1
 MIT
+MIT License
+Modified BSD
+MPL 1.1
 Public Domain
+The Apache License, Version 2.0
+The Apache Software License, Version 2.0
+The GNU General Public License (GPL), Version 2, With Classpath Exception
+The MIT License
 WTFPL

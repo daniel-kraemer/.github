@@ -86,8 +86,8 @@ jobs:
           mvn --no-transfer-progress
           org.codehaus.mojo:license-maven-plugin:third-party-report
           org.codehaus.mojo:license-maven-plugin:add-third-party
-          -Dlicense.failOnBlacklist=true
           -Dlicense.failOnMissing=true
+          -Dlicense.failOnBlacklist=true
           -Dlicense.includedLicenses=https://raw.githubusercontent.com/daniel-kraemer/.github/main/included-licenses.txt
           -Dlicense.excludedLicenses=https://raw.githubusercontent.com/daniel-kraemer/.github/main/excluded-licenses.txt
       - name: Upload License Check Report
