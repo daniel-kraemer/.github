@@ -3,6 +3,8 @@ name: CI Build
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
