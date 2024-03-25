@@ -55,6 +55,10 @@ jobs:
         with:
           path: ./target
           key: build-artifacts-cache
+      - name: Check coverage
+        if: ${{ hashFiles('./target/site/jacoco/jacoco.xml') != '' }}
+        run: |
+          echo "FILE FOUND!"
       - name: SonarQube Analysis
         run: >
           mvn --no-transfer-progress
