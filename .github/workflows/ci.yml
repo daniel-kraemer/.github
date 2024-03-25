@@ -59,4 +59,5 @@ jobs:
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
           -Dsonar.qualitygate.wait=true
