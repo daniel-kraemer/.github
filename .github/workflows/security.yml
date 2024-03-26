@@ -49,11 +49,11 @@ jobs:
           
           chmod +x create_jira_issue.sh
 
-          ./create_jira_issue.sh 
-          ./target/dependency-check-report.json 
-          ${{ secrets.JIRA_API_URL }} 
-          ${{ secrets.JIRA_API_USER }} 
-          ${{ secrets.JIRA_API_TOKEN }} 
+          ./create_jira_issue.sh
+          ./target/dependency-check-report.json
+          ${{ secrets.JIRA_API_URL }}
+          ${{ secrets.JIRA_API_USER }}
+          ${{ secrets.JIRA_API_TOKEN }}
           ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       - name: Upload Dependency Check Report
         uses: actions/upload-artifact@v4

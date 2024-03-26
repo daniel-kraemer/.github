@@ -42,7 +42,7 @@ for vulnerability in $(echo "${vulnerabilities}" | jq -r '.[] | @base64'); do
   vulnerability_description=$(_jq '.description')
 
   # JQL query to search for issues with a specific summary
-  jql_query=$(printf %s "project = \"$JIRA_PROJECT_NAME}\" AND summary ~ \"$vulnerability_name\" AND status != Done" | jq -s -R -r @uri)
+  jql_query=$(printf %s "project = \"$JIRA_PROJECT_NAME\" AND summary ~ \"$vulnerability_name\" AND status != Done" | jq -s -R -r @uri)
 
   # Send a GET request to Jira REST API to search for issues
   response=$(curl -s -f -S -u "$JIRA_API_USER":"$JIRA_API_TOKEN" -X GET "$JIRA_SEARCH_ISSUE_API?jql=$jql_query")
