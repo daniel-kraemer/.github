@@ -34,6 +34,7 @@ jobs:
           verify
           -DskipTests
       - name: OWASP Dependency Check
+        id: owasp
         if: success() || failure()
         run: >
           mvn --no-transfer-progress
@@ -43,11 +44,11 @@ jobs:
           -DhostedSuppressionsUrl=https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
       - name: Create Jira Issues for CVE
-        if: success() || failure()
+        if: steps.owasp.conclusion == 'failure'
         run: >
-          curl -sOL https://raw.githubusercontent.com/daniel-kraemer/.github/main/create_jira_issue.sh
+          curl -sOL https://raw.githubusercontent.com/daniel-kraemer/.github/main/create_jira_issue_for_cve.sh
           
-          chmod +x create_jira_issue.sh
+          chmod +x create_jira_issue_for_cve.sh
 
           ./create_jira_issue.sh
           ./target/dependency-check-report.json
@@ -62,6 +63,7 @@ jobs:
           name: owasp-dependency-check-report
           path: ./target/dependency-check-report.html
       - name: Licence Check
+        id: license
         if: success() || failure()
         run: >
           mvn --no-transfer-progress
@@ -71,6 +73,19 @@ jobs:
           -Dlicense.failOnBlacklist=true
           -Dlicense.includedLicenses=https://raw.githubusercontent.com/daniel-kraemer/.github/main/included-licenses.txt
           -Dlicense.excludedLicenses=https://raw.githubusercontent.com/daniel-kraemer/.github/main/excluded-licenses.txt
+      - name: Create Jira Issues for failed License Check
+        if: steps.license.conclusion == 'failure'
+        run: >
+          curl -sOL https://raw.githubusercontent.com/daniel-kraemer/.github/main/create_jira_issue_for_license.sh
+
+          chmod +x create_jira_issue_for_license.sh
+
+          ./create_jira_issue_for_license.sh
+          ${{ secrets.JIRA_API_URL }}
+          ${{ secrets.JIRA_API_USER }}
+          ${{ secrets.JIRA_API_TOKEN }}
+          ${{ github.repository }}
+          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       - name: Upload License Check Report
         uses: actions/upload-artifact@v4
         if: success() || failure()
