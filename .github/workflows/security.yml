@@ -44,10 +44,17 @@ jobs:
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
       - name: Create Jira Issues for CVE
         if: success() || failure()
-        run: |
+        run: >
           curl -sOL https://raw.githubusercontent.com/daniel-kraemer/.github/main/create_jira_issue.sh
+          
           chmod +x create_jira_issue.sh
-          ./create_jira_issue.sh ./target/dependency-check-report.json ${{ secrets.JIRA_API_URL }} ${{ secrets.JIRA_API_USER }} ${{ secrets.JIRA_API_TOKEN }} ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          ./create_jira_issue.sh 
+          ./target/dependency-check-report.json 
+          ${{ secrets.JIRA_API_URL }} 
+          ${{ secrets.JIRA_API_USER }} 
+          ${{ secrets.JIRA_API_TOKEN }} 
+          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       - name: Upload Dependency Check Report
         uses: actions/upload-artifact@v4
         if: success() || failure()
