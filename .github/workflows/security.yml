@@ -44,7 +44,7 @@ jobs:
           -DhostedSuppressionsUrl=https://raw.githubusercontent.com/daniel-kraemer/.github/main/owasp-suppressions.xml
           -DnvdDatafeedUrl=https://dependency-check.github.io/DependencyCheck_Builder/nvd_cache/nvdcve-{0}.json.gz
       - name: Create Jira Issues for CVE
-        if: steps.owasp.conclusion == 'failure'
+        if: ${{ failure() && steps.owasp.conclusion == 'failure' }}
         run: >
           curl -sOL https://raw.githubusercontent.com/daniel-kraemer/.github/main/create_jira_issue_for_cve.sh
           
@@ -74,7 +74,7 @@ jobs:
           -Dlicense.includedLicenses=https://raw.githubusercontent.com/daniel-kraemer/.github/main/included-licenses.txt
           -Dlicense.excludedLicenses=https://raw.githubusercontent.com/daniel-kraemer/.github/main/excluded-licenses.txt
       - name: Create Jira Issues for failed License Check
-        if: steps.license.conclusion == 'failure'
+        if: ${{ failure() && steps.license.conclusion == 'failure' }}
         run: >
           curl -sOL https://raw.githubusercontent.com/daniel-kraemer/.github/main/create_jira_issue_for_license.sh
 
